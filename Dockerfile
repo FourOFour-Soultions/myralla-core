@@ -13,5 +13,5 @@ RUN echo "Asia/Manila" > /etc/timezone
 RUN addgroup -S spring && adduser -S spring -G spring
 USER spring:spring
 
-COPY --from=build /usr/src/app/target/apollomailgun-0.0.1-SNAPSHOT.jar app.jar
+COPY --from=build /usr/src/app/target/myralla-0.0.1-SNAPSHOT.jar app.jar
 ENTRYPOINT ["java","-Duser.timezone=Asia/Manila","-Dlog4j2.formatMsgNoLookups=true","-jar","/app.jar"]
