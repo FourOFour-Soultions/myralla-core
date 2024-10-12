@@ -1,0 +1,50 @@
+# Maven
+target/
+*.log
+*.jar
+*.war
+*.class
+*.iml
+*.h2.db
+
+# Gradle
+.gradle/
+build/
+*.log
+*.jar
+*.war
+*.class
+
+# IDEs
+.idea/
+*.iml
+*.ipr
+*.iws
+*.class
+*.project
+*.settings/
+.vscode/
+
+# Java
+*.class
+*.jar
+*.war
+*.log
+*.db
+
+# Environment variables
+.env
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Other
+*.bak
+*.tmp
+*.swp
+*.swo
+# Maven Wrapper
+mvnw
+mvnw.cmd
+.mvn/
