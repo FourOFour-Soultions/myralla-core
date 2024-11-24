@@ -1,12 +1,9 @@
 package com.myralla.loyalty.Utilities;
 
-
 import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.security.SecureRandom;
 import java.util.Base64;
-
 
 public class Encryptor {
 private static final String ALGORITHM = "AES";
@@ -27,14 +24,6 @@ private static final int ORG_KEY_LENGTH = 6;
         return Base64.getEncoder().encodeToString(encryptedBytes);
     }
     
-    public static String decrypt(String encryptedData, SecretKey key) throws Exception {
-        Cipher cipher = Cipher.getInstance(ALGORITHM);
-        cipher.init(Cipher.DECRYPT_MODE, key);
-        byte[] decodedBytes = Base64.getDecoder().decode(encryptedData);
-        byte[] decryptedBytes = cipher.doFinal(decodedBytes);
-        return new String(decryptedBytes);
-    }
-
     public static String generateOrgKey() {
         SecureRandom secureRandom = new SecureRandom();
         byte[] apiKeyBytes = new byte[ORG_KEY_LENGTH];

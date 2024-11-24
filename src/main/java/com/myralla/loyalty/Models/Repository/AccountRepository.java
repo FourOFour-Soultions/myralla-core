@@ -5,6 +5,6 @@ import com.myralla.loyalty.Models.Entity.Accounts;
 
 public interface AccountRepository extends JpaRepository<Accounts, Long> {
 
-    boolean existsByExternalKey(String externalKey);
+    boolean existsByTenantId(String tenantId);
 
 }

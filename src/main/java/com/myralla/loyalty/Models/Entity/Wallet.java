@@ -5,32 +5,27 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "accounts")
 @Getter
 @Setter
-public class Accounts {
-
+@Table(name = "wallet")
+public class Wallet {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
     @Column(name = "tenant_id")
     private String tenantId;
 
-    @Column(name = "org_key")
-    private String orgKey;
+    @Column(name = "account_id")
+    private String accountId;
+
+    @Column(name = "balance")
+    private Double balance;
 
     @Column(name = "created_at")
     private String createdAt;
 
     @Column(name = "updated_at")
     private String updatedAt;
-
-
 }

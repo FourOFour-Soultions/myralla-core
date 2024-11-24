@@ -20,14 +20,9 @@ public class ApiController {
     @Autowired
     private AccountService accountService;
 
-    @GetMapping(path = "testGet", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> testGet() {
-        return ResponseEntity.ok(Map.of("message", "testGet success"));
-    }
-
     @PostMapping(path = "createAccount", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Object> createAccount(@RequestBody Map<String, String> body) {
-       return accountService.linkAccount(body);
+       return accountService.createAccount(body);
     }
 
     @PostMapping(path = "registerTenant", produces = MediaType.APPLICATION_JSON_VALUE)

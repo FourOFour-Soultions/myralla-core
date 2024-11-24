@@ -5,32 +5,24 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "accounts")
 @Getter
 @Setter
-public class Accounts {
-
+@Table(name = "push_notifications")
+public class PushNotifications {
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long Id;
 
-    @Column(name = "first_name")
-    private String firstName;
-
-    @Column(name = "last_name")
-    private String lastName;
-
     @Column(name = "tenant_id")
     private String tenantId;
 
-    @Column(name = "org_key")
-    private String orgKey;
+    @Column(name = "callback")
+    private String callback;
 
     @Column(name = "created_at")
     private String createdAt;
 
     @Column(name = "updated_at")
     private String updatedAt;
-
-
 }

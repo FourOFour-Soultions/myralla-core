@@ -33,12 +33,10 @@ public class Tenants {
 
     @Column(name = "updated_at")
     private String updatedAt;
-
-    // api key
+    
     @Column(name = "api_key")
     private String apiKey;
 
-    // api secret
     @Column(name = "api_secret")
     private String apiSecret;
 }

@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
@@ -22,26 +23,42 @@ public class AccountService {
     @Autowired
     private TenantRepository tenantRepository;
 
-    public ResponseEntity<Object> linkAccount(Map<String, String> body) {
-        String externalKey = body.get("externalKey");
+    @Autowired
+    private WalletService walletService;
+
+    public ResponseEntity<Object> createAccount(Map<String, String> body) {
+        String tenantId = body.get("tenantId");
         String orgKey = body.get("orgKey");
 
-        if (externalKey == null || externalKey.isEmpty()) {
+        if (tenantId == null || tenantId.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "externalKey is missing"));
         }
         if (orgKey == null || orgKey.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "orgKey is missing"));
         }
-        if (accountRepository.existsByExternalKey(externalKey)) {
+        if (accountRepository.existsByTenantId(tenantId)) {
             return ResponseEntity.badRequest().body(Map.of("message", "Account already exists"));
         }
 
         Accounts newAccount = new Accounts();
-        newAccount.setExternalKey(externalKey);
+        newAccount.setTenantId(tenantId);
         newAccount.setOrgKey(orgKey);
+        newAccount.setFirstName(body.get("firstName"));
+        newAccount.setLastName(body.get("lastName"));
         newAccount.setCreatedAt(java.time.LocalDateTime.now().toString());
         newAccount.setUpdatedAt(java.time.LocalDateTime.now().toString());
         accountRepository.saveAndFlush(newAccount);
+
+        log.info("Assigned Id to new Account: ", newAccount.getId().toString());
+        // Auto Create Wallet Upon Account Creation
+        HashMap<String, String> walletBody = new HashMap<>();
+        walletBody.put("tenantId", tenantId);
+        walletBody.put("accountId", newAccount.getId().toString());
+        walletBody.put("balance", "0.0");
+        walletBody.put("createdAt", java.time.LocalDateTime.now().toString());
+        walletBody.put("updatedAt", java.time.LocalDateTime.now().toString());
+    
+        walletService.createWallet(walletBody);
         return ResponseEntity.status(201).body(Map.of("message", "linkAccount success"));
     }
 
