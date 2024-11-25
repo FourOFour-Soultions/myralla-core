@@ -75,7 +75,7 @@ public class AccountService {
         newTenant.setName(name);
         newTenant.setApiKey(Encryptor.generateRandomKey());
         newTenant.setApiSecret(Encryptor.generateRandomKey());
-        newTenant.setOrgKey(orgKey);
+        newTenant.setOrgKey(orgKey);    
         newTenant.setDescription(body.getOrDefault("description", "No Description Provided Upon Registration"));
         newTenant.setCreatedAt(java.time.LocalDateTime.now().toString());
         newTenant.setUpdatedAt(java.time.LocalDateTime.now().toString());
