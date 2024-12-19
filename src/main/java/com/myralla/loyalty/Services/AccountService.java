@@ -1,10 +1,11 @@
 package com.myralla.loyalty.Services;
 
-import com.myralla.loyalty.Models.Entity.Accounts;
-import com.myralla.loyalty.Models.Entity.Tenants;
-import com.myralla.loyalty.Models.Repository.AccountRepository;
-import com.myralla.loyalty.Models.Repository.TenantRepository;
+import com.myralla.loyalty.Models.Accounts;
+import com.myralla.loyalty.Models.Tenants;
+import com.myralla.loyalty.Repository.AccountRepository;
+import com.myralla.loyalty.Repository.TenantRepository;
 import com.myralla.loyalty.Utilities.Encryptor;
+import com.myralla.loyalty.dto.AccountDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +27,44 @@ public class AccountService {
     @Autowired
     private WalletService walletService;
 
-    public ResponseEntity<Object> createAccount(Map<String, String> body) {
-        String tenantId = body.get("tenantId");
-        String orgKey = body.get("orgKey");
+    public ResponseEntity<Object> createAccount(AccountDTO accountDTO) {
 
+        try {
+
+            ResponseEntity<Object> validationResponse = validateAccountCreationRequest(accountDTO.getTenantId(), accountDTO.getOrgKey());
+
+            if (validationResponse != null) {
+                return validationResponse;
+            }
+
+            Accounts newAccount = new Accounts();
+            newAccount.setTenantId(accountDTO.getTenantId());
+            newAccount.setOrgKey(accountDTO.getOrgKey());
+            newAccount.setFirstName(accountDTO.getFirstName());
+            newAccount.setLastName(accountDTO.getLastName());
+            newAccount.setCreatedAt(java.time.LocalDateTime.now().toString());
+            newAccount.setUpdatedAt(java.time.LocalDateTime.now().toString());
+            accountRepository.saveAndFlush(newAccount);
+
+            log.info("Assigned Id to new Account: ", newAccount.getId().toString());
+
+            // Auto Create Wallet Upon Account Creation
+            HashMap<String, String> walletBody = new HashMap<>();
+            walletBody.put("tenantId", accountDTO.getTenantId());
+            walletBody.put("accountId", newAccount.getId().toString());
+            walletBody.put("balance", "0.0");
+            walletBody.put("createdAt", java.time.LocalDateTime.now().toString());
+            walletBody.put("updatedAt", java.time.LocalDateTime.now().toString());
+
+            walletService.createWallet(walletBody);
+            return ResponseEntity.status(201).body(Map.of("message", "linkAccount success"));
+        } catch (Exception e) {
+            log.error("Error creating account: ", e);
+            return ResponseEntity.status(500).body(Map.of("message", "Internal Server Error"));
+        }
+    }
+
+    private ResponseEntity<Object> validateAccountCreationRequest(String tenantId, String orgKey) {
         if (tenantId == null || tenantId.isEmpty()) {
             return ResponseEntity.badRequest().body(Map.of("message", "externalKey is missing"));
         }
@@ -39,27 +74,7 @@ public class AccountService {
         if (accountRepository.existsByTenantId(tenantId)) {
             return ResponseEntity.badRequest().body(Map.of("message", "Account already exists"));
         }
-
-        Accounts newAccount = new Accounts();
-        newAccount.setTenantId(tenantId);
-        newAccount.setOrgKey(orgKey);
-        newAccount.setFirstName(body.get("firstName"));
-        newAccount.setLastName(body.get("lastName"));
-        newAccount.setCreatedAt(java.time.LocalDateTime.now().toString());
-        newAccount.setUpdatedAt(java.time.LocalDateTime.now().toString());
-        accountRepository.saveAndFlush(newAccount);
-
-        log.info("Assigned Id to new Account: ", newAccount.getId().toString());
-        // Auto Create Wallet Upon Account Creation
-        HashMap<String, String> walletBody = new HashMap<>();
-        walletBody.put("tenantId", tenantId);
-        walletBody.put("accountId", newAccount.getId().toString());
-        walletBody.put("balance", "0.0");
-        walletBody.put("createdAt", java.time.LocalDateTime.now().toString());
-        walletBody.put("updatedAt", java.time.LocalDateTime.now().toString());
-    
-        walletService.createWallet(walletBody);
-        return ResponseEntity.status(201).body(Map.of("message", "linkAccount success"));
+        return null;
     }
 
     public ResponseEntity<Object> createTenant(Map<String, String> body) throws Exception {

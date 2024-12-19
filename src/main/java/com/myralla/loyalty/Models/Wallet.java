@@ -1,7 +1,5 @@
-package com.myralla.loyalty.Models.Entity;
+package com.myralla.loyalty.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,8 +7,8 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "programs")
-public class Programs {
+@Table(name = "wallet")
+public class Wallet {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,8 +17,11 @@ public class Programs {
     @Column(name = "tenant_id")
     private String tenantId;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "account_id")
+    private String accountId;
+
+    @Column(name = "balance")
+    private Double balance;
 
     @Column(name = "created_at")
     private String createdAt;

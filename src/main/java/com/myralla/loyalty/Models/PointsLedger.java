@@ -1,11 +1,10 @@
-package com.myralla.loyalty.Models.Entity;
+package com.myralla.loyalty.Models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
-import com.myralla.loyalty.Enums.PointTransactionType;
 
 @Entity
 @Table(name = "points_ledger")
@@ -22,8 +21,7 @@ public class PointsLedger {
 
     @Column(name = "account_id")
     private String accountId;
-    
-    @Enumerated(EnumType.STRING)
+
     @Column(name = "transaction_type", nullable = false)
     private String transactionType;
 

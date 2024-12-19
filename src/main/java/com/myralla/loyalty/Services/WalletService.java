@@ -3,9 +3,9 @@ package com.myralla.loyalty.Services;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.myralla.loyalty.Exceptions.WalletCreationException;
-import com.myralla.loyalty.Models.Entity.Wallet;
+import com.myralla.loyalty.Models.Wallet;
 import java.util.Map;
-import com.myralla.loyalty.Models.Repository.WalletRepository;
+import com.myralla.loyalty.Repository.WalletRepository;
 
 @Service
 public class WalletService {

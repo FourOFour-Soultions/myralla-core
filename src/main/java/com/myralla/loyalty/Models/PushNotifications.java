@@ -1,4 +1,4 @@
-package com.myralla.loyalty.Models.Entity;
+package com.myralla.loyalty.Models;
 
 import jakarta.persistence.*;
 import lombok.Getter;

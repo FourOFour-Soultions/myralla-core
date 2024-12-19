@@ -1,7 +1,7 @@
-package com.myralla.loyalty.Models.Repository;
+package com.myralla.loyalty.Repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.myralla.loyalty.Models.Entity.Accounts;
+import com.myralla.loyalty.Models.Accounts;
 
 public interface AccountRepository extends JpaRepository<Accounts, Long> {
 
